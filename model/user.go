@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/josephspurrier/gowebapp/shared/database"
+	"github.com/atabek/gowebapp/shared/database"
 
 	"gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"

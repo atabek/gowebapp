@@ -1,7 +1,7 @@
 # GoWebApp
 
-[![Go Report Card](https://goreportcard.com/badge/github.com/josephspurrier/gowebapp)](https://goreportcard.com/report/github.com/josephspurrier/gowebapp)
-[![GoDoc](https://godoc.org/github.com/josephspurrier/gowebapp?status.svg)](https://godoc.org/github.com/josephspurrier/gowebapp) 
+[![Go Report Card](https://goreportcard.com/badge/github.com/atabek/gowebapp)](https://goreportcard.com/report/github.com/atabek/gowebapp)
+[![GoDoc](https://godoc.org/github.com/atabek/gowebapp?status.svg)](https://godoc.org/github.com/atabek/gowebapp) 
 
 Basic MVC Web Application in Golang
 
@@ -10,7 +10,7 @@ This project demonstrates how to structure and build a website using the Go lang
 To download, run the following command:
 
 ~~~
-go get github.com/josephspurrier/gowebapp
+go get github.com/atabek/gowebapp
 ~~~
 
 ## Quick Start with Bolt
@@ -79,7 +79,7 @@ github.com/gorilla/sessions				- cookie and filesystem sessions
 github.com/go-sql-driver/mysql 			- MySQL driver
 github.com/haisum/recaptcha				- Google reCAPTCHA support
 github.com/jmoiron/sqlx 				- MySQL general purpose extensions
-github.com/josephspurrier/csrfbanana 	- CSRF protection for gorilla sessions
+github.com/atabek/csrfbanana 	- CSRF protection for gorilla sessions
 github.com/julienschmidt/httprouter 	- high performance HTTP request router
 github.com/justinas/alice				- middleware chaining
 github.com/mattn/go-sqlite3				- SQLite driver

@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/josephspurrier/gowebapp/shared/database"
+	"github.com/atabek/gowebapp/shared/database"
 )
 
 // *****************************************************************************

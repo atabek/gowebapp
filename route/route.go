@@ -3,12 +3,12 @@ package route
 import (
 	"net/http"
 
-	"github.com/josephspurrier/gowebapp/controller"
-	"github.com/josephspurrier/gowebapp/route/middleware/acl"
-	hr "github.com/josephspurrier/gowebapp/route/middleware/httprouterwrapper"
-	"github.com/josephspurrier/gowebapp/route/middleware/logrequest"
-	"github.com/josephspurrier/gowebapp/route/middleware/pprofhandler"
-	"github.com/josephspurrier/gowebapp/shared/session"
+	"github.com/atabek/gowebapp/controller"
+	"github.com/atabek/gowebapp/route/middleware/acl"
+	hr "github.com/atabek/gowebapp/route/middleware/httprouterwrapper"
+	"github.com/atabek/gowebapp/route/middleware/logrequest"
+	"github.com/atabek/gowebapp/route/middleware/pprofhandler"
+	"github.com/atabek/gowebapp/shared/session"
 
 	"github.com/gorilla/context"
 	"github.com/josephspurrier/csrfbanana"
@@ -79,6 +79,11 @@ func routes() *httprouter.Router {
 	r.POST("/register", hr.Handler(alice.
 		New(acl.DisallowAuth).
 		ThenFunc(controller.RegisterPOST)))
+
+	// Students page
+	r.GET("/students", hr.Handler(alice.
+		New().
+		ThenFunc(controller.Students)))
 
 	// About
 	r.GET("/about", hr.Handler(alice.

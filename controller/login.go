@@ -5,10 +5,10 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/josephspurrier/gowebapp/model"
-	"github.com/josephspurrier/gowebapp/shared/passhash"
-	"github.com/josephspurrier/gowebapp/shared/session"
-	"github.com/josephspurrier/gowebapp/shared/view"
+	"github.com/atabek/gowebapp/model"
+	"github.com/atabek/gowebapp/shared/passhash"
+	"github.com/atabek/gowebapp/shared/session"
+	"github.com/atabek/gowebapp/shared/view"
 
 	"github.com/gorilla/sessions"
 	"github.com/josephspurrier/csrfbanana"

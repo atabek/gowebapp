@@ -1,7 +1,7 @@
 {
 	"Database": {
 		"Type": "Bolt",
-		"Bolt": {		
+		"Bolt": {
  			"Path": "gowebapp.db"
   		},
 		"MongoDB": {
@@ -33,7 +33,7 @@
 		"Hostname": "",
 		"UseHTTP": true,
 		"UseHTTPS": false,
-		"HTTPPort": 80,
+		"HTTPPort": 3000,
 		"HTTPSPort": 443,
 		"CertFile": "tls/server.crt",
 		"KeyFile": "tls/server.key"

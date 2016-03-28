@@ -3,8 +3,8 @@ package controller
 import (
 	"net/http"
 
-	"github.com/josephspurrier/gowebapp/shared/session"
-	"github.com/josephspurrier/gowebapp/shared/view"
+	"github.com/atabek/gowebapp/shared/session"
+	"github.com/atabek/gowebapp/shared/view"
 )
 
 // Displays the default home page
