@@ -81,9 +81,9 @@ func routes() *httprouter.Router {
 		ThenFunc(controller.RegisterPOST)))
 
 	// Students page
-	r.GET("/students", hr.Handler(alice.
+	r.GET("/list", hr.Handler(alice.
 		New().
-		ThenFunc(controller.Students)))
+		ThenFunc(controller.List)))
 
 	// About
 	r.GET("/about", hr.Handler(alice.
