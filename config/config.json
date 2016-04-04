@@ -1,6 +1,6 @@
 {
 	"Database": {
-		"Type": "Bolt",
+		"Type": "MongoDB",
 		"Bolt": {
  			"Path": "gowebapp.db"
   		},
