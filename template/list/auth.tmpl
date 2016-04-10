@@ -1,12 +1,21 @@
 {{define "title"}}Go Web App{{end}}
-{{define "head"}}{{end}}
+{{define "head"}}{{JS "static/js/angular.min.js"}}{{end}}
 {{define "content"}}
-<div class="container">
+
+<div ng-app="myApp" class="container">
 	<div class="page-header">
 		<h1>Hello, {{.first_name}}</h1>
 	</div>
 	<p>You have arrived to the students list page.</p>
+
+	<div ng-controller="myCtrl">
+		{{"{{"}} firstName + " " + lastName {{"}}"}}
+	</div>
+	<p id="demo">
+	</p>
+
 	{{template "footer" .}}
 </div>
+{{JS "static/js/app.js"}}
 {{end}}
 {{define "foot"}}{{end}}
