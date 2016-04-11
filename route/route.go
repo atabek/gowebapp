@@ -79,7 +79,7 @@ func routes() *httprouter.Router {
 	r.POST("/register", hr.Handler(alice.
 		New(acl.DisallowAuth).
 		ThenFunc(controller.RegisterPOST)))
-		
+
 	// Register Student
 	r.GET("/registerstudent", hr.Handler(alice.
 		New(acl.DisallowAnon).
@@ -92,6 +92,9 @@ func routes() *httprouter.Router {
 	r.GET("/list", hr.Handler(alice.
 		New().
 		ThenFunc(controller.List)))
+	r.GET("/students", hr.Handler(alice.
+		New(acl.DisallowAnon).
+		ThenFunc(controller.StudentsJSONGet)))
 
 	// About
 	r.GET("/about", hr.Handler(alice.

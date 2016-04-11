@@ -97,3 +97,22 @@ func StudentCreate(first_name, last_name, grade, student_id string) error {
 
 	return standardizeStudentError(err)
 }
+
+// StudentsGet gets students
+func StudentsGet() ([]Student, error) {
+	var err error
+
+	// List all students
+	var students = make([]Student, 0)
+
+	if database.CheckConnection() {
+		session := database.Mongo.Copy()
+		defer session.Close()
+		c := session.DB(database.ReadConfig().MongoDB.Database).C("student")
+		err = c.Find(nil).All(&students)
+	} else {
+		err = ErrUnavailableStudent
+	}
+
+	return students, standardizeStudentError(err)
+}
