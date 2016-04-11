@@ -2,14 +2,39 @@
 {{define "head"}}{{JS "static/js/angular.min.js"}}{{end}}
 {{define "content"}}
 
-<div ng-app="myApp" class="container">
+<div ng-app="aftercareApp" class="container">
+	<h1>GSA Aftercare</h1>
 	<div class="page-header">
 		<h1>Hello, {{.first_name}}</h1>
 	</div>
 	<p>You have arrived to the students list page.</p>
 
-	<div ng-controller="myCtrl">
+	<div ng-controller="StudentCtrl">
 		{{"{{"}} firstName + " " + lastName {{"}}"}}
+
+
+        <p>This is a list of all the groups in <a href="http://www.meetup.com">meetup.com</a> that
+        mention <a href="http://golang.org">#golang</a> as one of its topics.
+        The list is ordered by number of members and you can apply filters to any column. The
+        continent for each country is obtained using <a href="http://freebase.com">Freebase</a>.
+        </p>
+
+        <div>
+            <div class='row'>
+                <span ng-repeat='f in filteredFields'>{{"{{"}}f{{"}}"}}</span>
+            </div>
+            <div class='row'>
+                <span ng-repeat='f in filteredFields'>
+                    <input placeholder='filter' ng-model='search[f]' ng-change='refilter()'>
+                </span>
+            </div>
+            <div class='row' ng-repeat='s in students | filter:search | orderBy:"lastname":true'>
+                <span>{{"{{"}}s.Student_id{{"}}"}}</span>
+                <span>{{"{{"}}s.Last_name{{"}}"}}</span>
+                <span>{{"{{"}}s.First_name{{"}}"}}</span>
+                <span>{{"{{"}}s.Grade{{"}}"}}</span>
+            </div>
+        </div>
 	</div>
 	<p id="demo">
 	</p>
