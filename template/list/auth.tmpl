@@ -11,12 +11,15 @@
 	<div ng-controller="StudentCtrl">
         <div>
 			<div class="row">
-			    <input class="col-xs-6" type="text" placeholder="Search by students ID, First and Last Name, Grade" ng-model="query">
+				<div class="form-group">
+			    	<input class="col-xs-6 form-control" type="text" placeholder="Search by students ID, First and Last Name, Grade" ng-model="query">
+				</div>
+				<br>
 			</div>
 			<div class="row">
 			    <table id="results" class="table table-striped table-bordered table-hover">
 			        <thead>
-			        <tr>
+			        <tr class="success">
 			            <th>ID</th>
 			            <th>Last Name</th>
 			            <th>First Name</th>
