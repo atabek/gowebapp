@@ -71,7 +71,7 @@ func RegisterStudentPOST(w http.ResponseWriter, r *http.Request) {
 	// Get database result
 	_, err := model.StudentBySID(student_id)
 
-	if err == model.ErrNoResultStudent { // If success (no user exists with that email)
+	if err == model.ErrNoResult { // If success (no user exists with that email)
 		ex := model.StudentCreate(first_name, last_name, grade, student_id)
 		// Will only error if there is a problem with the query
 		if ex != nil {

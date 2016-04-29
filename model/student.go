@@ -1,12 +1,9 @@
 package model
 
 import (
-	"errors"
 	"time"
 
 	"github.com/atabek/gowebapp/shared/database"
-
-	"gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
 )
 
@@ -26,12 +23,6 @@ type Student struct {
 	Deleted    uint8         `db:"deleted"    bson:"deleted"`
 }
 
-var (
-	ErrCodeStudent        = errors.New("Case statement in code is not correct.")
-	ErrNoResultStudent    = errors.New("Result not found.")
-	ErrUnavailableStudent = errors.New("Database is unavailable.")
-)
-
 // Id returns the student id
 func (s *Student) ID() string {
 	return s.ObjectId.Hex()
@@ -40,15 +31,6 @@ func (s *Student) ID() string {
 // SID returns the student school id
 func (s *Student) SID() string {
 	return s.Student_id
-}
-
-// standardizeStudentErrors returns the same error regardless of the database used
-func standardizeStudentError(err error) error {
-	if err == mgo.ErrNotFound {
-		return ErrNoResultStudent
-	}
-
-	return err
 }
 
 // StudentBySID gets student information from student school id
@@ -63,10 +45,10 @@ func StudentBySID(sid string) (Student, error) {
 		c := session.DB(database.ReadConfig().MongoDB.Database).C("student")
 		err = c.Find(bson.M{"student_id": sid}).One(&result)
 	} else {
-		err = ErrUnavailableStudent
+		err = ErrUnavailable
 	}
 
-	return result, standardizeStudentError(err)
+	return result, standardizeError(err)
 }
 
 // StudentCreate creates student
@@ -92,10 +74,10 @@ func StudentCreate(first_name, last_name, grade, student_id string) error {
 		}
 		err = c.Insert(student)
 	} else {
-		err = ErrUnavailableStudent
+		err = ErrUnavailable
 	}
 
-	return standardizeStudentError(err)
+	return standardizeError(err)
 }
 
 // StudentsGet gets students
@@ -111,8 +93,8 @@ func StudentsGet() ([]Student, error) {
 		c := session.DB(database.ReadConfig().MongoDB.Database).C("student")
 		err = c.Find(nil).All(&students)
 	} else {
-		err = ErrUnavailableStudent
+		err = ErrUnavailable
 	}
 
-	return students, standardizeStudentError(err)
+	return students, standardizeError(err)
 }

@@ -1,12 +1,10 @@
 package model
 
 import (
-	"errors"
 	"time"
 
 	"github.com/atabek/gowebapp/shared/database"
-
-	"gopkg.in/mgo.v2"
+	
 	"gopkg.in/mgo.v2/bson"
 )
 
@@ -27,24 +25,9 @@ type User struct {
 	Deleted    uint8         `db:"deleted" bson:"deleted"`
 }
 
-var (
-	ErrCode        = errors.New("Case statement in code is not correct.")
-	ErrNoResult    = errors.New("Result not found.")
-	ErrUnavailable = errors.New("Database is unavailable.")
-)
-
 // Id returns the user id
 func (u *User) ID() string {
 	return u.ObjectId.Hex()
-}
-
-// standardizeErrors returns the same error regardless of the database used
-func standardizeError(err error) error {
-	if err == mgo.ErrNotFound {
-		return ErrNoResult
-	}
-
-	return err
 }
 
 // UserByEmail gets user information from email
