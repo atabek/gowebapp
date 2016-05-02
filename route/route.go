@@ -101,6 +101,29 @@ func routes() *httprouter.Router {
 		New().
 		ThenFunc(controller.AboutGET)))
 
+	// Notepad
+	// r.GET("/clockin", hr.Handler(alice.
+	// 	New(acl.DisallowAnon).
+	// 	ThenFunc(controller.NotepadReadGET)))
+	r.GET("/clockin/create", hr.Handler(alice.
+		New(acl.DisallowAnon).
+		ThenFunc(controller.ClockinCreateGET)))
+	r.POST("/clockin/create", hr.Handler(alice.
+		New(acl.DisallowAnon).
+		ThenFunc(controller.ClockinCreatePOST)))
+
+	// r.GET("/clockin/update/:id", hr.Handler(alice.
+	// 	New(acl.DisallowAnon).
+	// 	ThenFunc(controller.NotepadUpdateGET)))
+
+	// r.POST("/clockin/update/:id", hr.Handler(alice.
+	// 	New(acl.DisallowAnon).
+	// 	ThenFunc(controller.NotepadUpdatePOST)))
+
+	// r.GET("/clockin/delete/:id", hr.Handler(alice.
+	// 	New(acl.DisallowAnon).
+	// 	ThenFunc(controller.NotepadDeleteGET)))
+
 	// Enable Pprof
 	r.GET("/debug/pprof/*pprof", hr.Handler(alice.
 		New(acl.DisallowAnon).
