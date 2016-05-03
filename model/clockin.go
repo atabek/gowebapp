@@ -17,8 +17,9 @@ import (
 type Clockin struct {
 	ObjectID     bson.ObjectId `bson:"_id"`
 	StudentID    string        `bson:"student_id"`
-	InAt         time.Time     `db:"in_at"  bson:"in_at"`
-	OutAt        time.Time     `db:"out_at" bson:"out_at"`
+	InAt         int64     `db:"in_at"  bson:"in_at"`
+	OutAt        int64     `db:"out_at" bson:"out_at"`
+	TotalTime    int64       `db:"total_time" bson:"total_time"`
 	IsOut        bool          `db:"is_out" bson:"is_out"`
 }
 
@@ -60,38 +61,32 @@ func ClockinByID(clockinID string) (Clockin, error) {
 	return result, standardizeError(err)
 }
 
-// ClockinByStudentID gets all clockins for a student
-// func ClockinByStudentID(student_id string) (Clockin, error) {
-// 	var err error
-//
-// 	var result Clockin
-//     timeZero := time.Time{}
-//
-// 	if database.CheckConnection() {
-// 		// Create a copy of mongo
-// 		session := database.Mongo.Copy()
-// 		defer session.Close()
-// 		c := session.DB(database.ReadConfig().MongoDB.Database).C("clockin")
-//
-// 		// Validate the object id
-//         // if bson.IsObjectIdHex(student_id) {
-// 		err = c.Find(bson.M{"student_id": student_id, "out_at": timeZero}).One(&result)
-//         fmt.Println("Got the following result: ", result)
-// 		// } else {
-// 		// 	err = ErrNoResult
-// 		// }
-// 	} else {
-// 		err = ErrUnavailable
-// 	}
-//
-// 	return result, standardizeError(err)
-// }
+// ClockinByStudentID gets the last clockin for a student
+func LastClockinByStudentID(student_id string) (Clockin, error) {
+	var err error
+
+	var result Clockin
+    timeZero := 0
+
+	if !database.CheckConnection() {
+		err = ErrUnavailable
+		return result, err
+	}
+	// Create a copy of mongo
+	session := database.Mongo.Copy()
+	defer session.Close()
+	c := session.DB(database.ReadConfig().MongoDB.Database).C("clockin")
+
+	err = c.Find(bson.M{"student_id": student_id, "out_at": timeZero}).One(&result)
+
+	return result, standardizeError(err)
+}
 
 // ClockinCreate creates a clockin
 func ClockinCreate(student_id string) error {
 	var err error
-	now := time.Now()
 
+	now := time.Now().Unix()
 	if !database.CheckConnection() {
         err = ErrUnavailable
         return err
@@ -103,26 +98,24 @@ func ClockinCreate(student_id string) error {
     s := session.DB(database.ReadConfig().MongoDB.Database).C("student")
 
     result := Student{}
-    zeroTime := time.Time{}
+    zeroTime := 0
 
     err = s.Find(bson.M{"student_id": student_id}).One(&result)
     if err != nil{
         err = ErrNoSuchStudent
         return err
     }
-    colQuerier := bson.M{"student_id": student_id, "out_at": zeroTime}
+
+    colQuerier := bson.M{"student_id": student_id,
+		"out_at": zeroTime, "is_out": false}
     count, err := c.Find(colQuerier).Count()
-	//fmt.Println("Count: ", count)
 
     if count == 0 {
-        //fmt.Println("This student needs to clock out.")
-        clockin := &Clockin{
-            ObjectID:  bson.NewObjectId(),
-            StudentID: student_id,
-            InAt:      now,
-            OutAt:     time.Time{},
-        }
-		//fmt.Println(clockin.ClockinID())
+		clockin := &Clockin{
+			ObjectID:  bson.NewObjectId(),
+			StudentID: student_id,
+			InAt:      now,
+		}
         err = c.Insert(clockin)
     }
     if count == 1 {
@@ -132,7 +125,14 @@ func ClockinCreate(student_id string) error {
         }
 
 		// Update
-        change := bson.M{"$set": bson.M{"out_at": time.Now(), "is_out": true}}
+		clockin, err := LastClockinByStudentID(student_id)
+		if err != nil{
+			return err
+		}
+
+		total_time := now - clockin.InAt
+        change := bson.M{"$set":
+			bson.M{"out_at": now, "total_time": total_time, "is_out": true}}
 		err = c.Update(colQuerier, change)
 
         if err != nil{
