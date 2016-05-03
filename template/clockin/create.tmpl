@@ -10,15 +10,15 @@
 	<form id="form" method="post">
 		<div class="form-group">
 			<label for="note">Clockin</label>
-			<div><input type="text" class="form-control" id="studentID" name="studentID"
-				placeholder="Enter student ID here..." value="">
+			<div><input type="text" class="form-control" id="student_id" name="student_id"
+				placeholder="Enter student ID here..." value="" autofocus>
 			</div>
 		</div>
 
 		<a title="Save" class="btn btn-success" role="submit" onclick="document.getElementById('form').submit();">
 			<span class="glyphicon glyphicon-ok" aria-hidden="true"></span> Submit
 		</a>
-		<a title="Back to Notepad" class="btn btn-danger" role="button" href="{{$.BaseURI}}clockin">
+		<a title="Back to Notepad" class="btn btn-danger" role="button" href="{{$.BaseURI}}">
 			<span class="glyphicon glyphicon-menu-left" aria-hidden="true"></span> Back
 		</a>
 

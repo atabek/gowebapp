@@ -12,6 +12,8 @@ var (
 	ErrCode = errors.New("Case statement in code is not correct.")
 	// ErrNoResult is a not results error
 	ErrNoResult = errors.New("Result not found.")
+	//ErrNoSuchStudent is there is no such student
+	ErrNoSuchStudent = errors.New("Try a valid student ID please.")
 	// ErrUnavailable is a database not available error
 	ErrUnavailable = errors.New("Database is unavailable.")
 	// ErrUnauthorized is a permissions violation

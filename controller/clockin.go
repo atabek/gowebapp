@@ -53,7 +53,7 @@ func ClockinCreatePOST(w http.ResponseWriter, r *http.Request) {
 	sess := session.Instance(r)
 
 	// Validate with required fields
-	if validate, missingField := view.Validate(r, []string{"studentID"}); !validate {
+	if validate, missingField := view.Validate(r, []string{"student_id"}); !validate {
 		sess.AddFlash(view.Flash{"Field missing: " + missingField, view.FlashError})
 		sess.Save(r, w)
 		ClockinCreateGET(w, r)
@@ -61,16 +61,17 @@ func ClockinCreatePOST(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Get form values
-	studentID := r.FormValue("studentID")
+	student_id := r.FormValue("student_id")
 
 	//studentID := fmt.Sprintf("%s", sess.Values["studentID"])
 
 	// Get database result
-	err := model.ClockinCreate(studentID)
+	err := model.ClockinCreate(student_id)
 	// Will only error if there is a problem with the query
 	if err != nil {
 		log.Println(err)
-		sess.AddFlash(view.Flash{"An error occurred on the server. Please try again later.", view.FlashError})
+		//sess.AddFlash(view.Flash{"An error occurred on the server. Please try again later.", view.FlashError})
+        sess.AddFlash(view.Flash{err.Error(), view.FlashError})
 		sess.Save(r, w)
 	} else {
 		sess.AddFlash(view.Flash{"Student clockin successful!", view.FlashSuccess})
