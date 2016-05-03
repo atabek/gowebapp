@@ -147,31 +147,33 @@ func ClockinCreate(student_id string) error {
 	return standardizeError(err)
 }
 
-/*
-// NoteDelete deletes a note
-func NoteDelete(userID string, noteID string) error {
+
+// ClockinDelete deletes a note
+// Also add an admin checking for delete functionality
+func ClockinDeleteByID(clockinID string) error {
 	var err error
 
-	if database.CheckConnection() {
-		// Create a copy of mongo
-		session := database.Mongo.Copy()
-		defer session.Close()
-		c := session.DB(database.ReadConfig().MongoDB.Database).C("note")
-
-		var note Note
-		note, err = NoteByID(userID, noteID)
-		if err == nil {
-			// Confirm the owner is attempting to modify the note
-			if note.UserID.Hex() == userID {
-				err = c.RemoveId(bson.ObjectIdHex(noteID))
-			} else {
-				err = ErrUnauthorized
-			}
-		}
-	} else {
+	if !database.CheckConnection() {
 		err = ErrUnavailable
+		return err
 	}
+	// Create a copy of mongo
+	session := database.Mongo.Copy()
+	defer session.Close()
+	c := session.DB(database.ReadConfig().MongoDB.Database).C("clockin")
 
+	//var clockin Clockin
+	_, err = ClockinByID(clockinID)
+	if err != nil {
+		return ErrNoResult
+	}
+	// Confirm the owner is attempting to modify the note
+	// if note.UserID.Hex() == userID {
+	// 	err = c.RemoveId(bson.ObjectIdHex(noteID))
+	// }
+	err = c.RemoveId(bson.ObjectIdHex(clockinID))
+	if err != nil {
+		return err
+	}
 	return standardizeError(err)
 }
-*/
