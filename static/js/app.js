@@ -1,9 +1,9 @@
-// var app = angular.module('myApp', [],
-//     function($interpolateProvider){
-//         $interpolateProvider.startSymbol('[[');
-//         $interpolateProvider.endSymbol(']]');
-//     });
 var app = angular.module('aftercareApp', []);
+
+app.config(function($interpolateProvider) {
+  $interpolateProvider.startSymbol('[[');
+  $interpolateProvider.endSymbol(']]');
+});
 
 app.controller('StudentCtrl', function($scope, $http) {
     'use strict';
@@ -21,7 +21,7 @@ app.controller('StudentCtrl', function($scope, $http) {
     $http.get('/students').then(function(res) {
         $scope.students = res.data;
         console.log($scope.students);
-        $scope.refilter();
+        //$scope.refilter();
     }, function(msg) {
         $scope.log(msg.data);
     });
