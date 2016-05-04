@@ -17,9 +17,9 @@ import (
 type Clockin struct {
 	ObjectID     bson.ObjectId `bson:"_id"`
 	StudentID    string        `bson:"student_id"`
-	InAt         int64     `db:"in_at"  bson:"in_at"`
-	OutAt        int64     `db:"out_at" bson:"out_at"`
-	TotalTime    int64       `db:"total_time" bson:"total_time"`
+	InAt         int64         `db:"in_at"  bson:"in_at"`
+	OutAt        int64         `db:"out_at" bson:"out_at"`
+	TotalTime    int64         `db:"total_time" bson:"total_time"`
 	IsOut        bool          `db:"is_out" bson:"is_out"`
 }
 
@@ -61,7 +61,7 @@ func ClockinByID(clockinID string) (Clockin, error) {
 	return result, standardizeError(err)
 }
 
-// ClockinByStudentID gets the last clockin for a student
+// LastClockinByStudentID gets the last clockin for a student
 func LastClockinByStudentID(student_id string) (Clockin, error) {
 	var err error
 
@@ -81,6 +81,29 @@ func LastClockinByStudentID(student_id string) (Clockin, error) {
 
 	return result, standardizeError(err)
 }
+
+
+// ClockinsByStudentID gets all clockins for a student
+func ClockinsByStudentID(student_id string) ([]Clockin, error) {
+	var err error
+
+	var result []Clockin
+
+	if database.CheckConnection() {
+		// Create a copy of mongo
+		session := database.Mongo.Copy()
+		defer session.Close()
+		c := session.DB(database.ReadConfig().MongoDB.Database).C("clockin")
+
+		err = c.Find(bson.M{"student_id": student_id}).All(&result)
+		if err != nil {
+			err = ErrUnavailable
+		}
+	}
+
+	return result, standardizeError(err)
+}
+
 
 // ClockinCreate creates a clockin
 func ClockinCreate(student_id string) error {

@@ -112,9 +112,9 @@ func routes() *httprouter.Router {
 		New(acl.DisallowAnon).
 		ThenFunc(controller.ClockinCreatePOST)))
 
-	// r.GET("/clockin/update/:id", hr.Handler(alice.
-	// 	New(acl.DisallowAnon).
-	// 	ThenFunc(controller.NotepadUpdateGET)))
+	r.GET("/clockins/student/json/:id", hr.Handler(alice.
+		New(acl.DisallowAnon).
+		ThenFunc(controller.ClockinByStudentIdJsonGET)))
 
 	// r.POST("/clockin/update/:id", hr.Handler(alice.
 	// 	New(acl.DisallowAnon).

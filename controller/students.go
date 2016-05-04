@@ -4,16 +4,17 @@ import (
 	"net/http"
 	"encoding/json"
 	"fmt"
+	"log"
 
 	"github.com/atabek/gowebapp/model"
+	"github.com/atabek/gowebapp/shared/session"
+	"github.com/atabek/gowebapp/shared/view"
 )
 
 // Displays the About page
 func StudentsJSONGet(w http.ResponseWriter, r *http.Request) {
-	// // Display the view
-	// v := view.New(r)
-	// v.Name = "about/about"
-	// v.Render(w)
+	sess := session.Instance(r)
+
 	students, err := model.StudentsGet()
 	if err == nil{
 		// Marshal provided interface into JSON structure
@@ -24,7 +25,10 @@ func StudentsJSONGet(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(200)
 		fmt.Fprintf(w, "%s", sj)
 	} else {
-		fmt.Println(err)
+		log.Println(err)
+		sess.AddFlash(view.Flash{"An error occurred on the server. Please try again later.", view.FlashError})
+		sess.Save(r, w)
+		http.Redirect(w, r, "/list", http.StatusFound)
+		return
 	}
-
 }

@@ -1,17 +1,18 @@
 package controller
 
 import (
-	//"fmt"
+	"fmt"
 	"log"
 	"net/http"
+	"encoding/json"
 
 	"github.com/atabek/gowebapp/model"
 	"github.com/atabek/gowebapp/shared/session"
 	"github.com/atabek/gowebapp/shared/view"
 
-	//"github.com/gorilla/context"
+	"github.com/gorilla/context"
 	"github.com/josephspurrier/csrfbanana"
-	//"github.com/julienschmidt/httprouter"
+	"github.com/julienschmidt/httprouter"
 )
 
 // NotepadReadGET displays the notes in the notepad
@@ -74,7 +75,7 @@ func ClockinCreatePOST(w http.ResponseWriter, r *http.Request) {
         sess.AddFlash(view.Flash{err.Error(), view.FlashError})
 		sess.Save(r, w)
 	} else {
-		sess.AddFlash(view.Flash{"Student clockin successful!", view.FlashSuccess})
+		sess.AddFlash(view.Flash{"Student clockin/out successful!", view.FlashSuccess})
 		sess.Save(r, w)
 		http.Redirect(w, r, "/clockin/create", http.StatusFound)
 		return
@@ -84,36 +85,76 @@ func ClockinCreatePOST(w http.ResponseWriter, r *http.Request) {
 	ClockinCreateGET(w, r)
 }
 
-/*
-// NotepadUpdateGET displays the note update page
-func NotepadUpdateGET(w http.ResponseWriter, r *http.Request) {
+// ClockinByStudentIdJsonGET displays the note update page
+func ClockinByStudentIdJsonGET(w http.ResponseWriter, r *http.Request) {
 	// Get session
 	sess := session.Instance(r)
 
 	// Get the note id
 	var params httprouter.Params
 	params = context.Get(r, "params").(httprouter.Params)
-	noteID := params.ByName("id")
+	studentID := params.ByName("id")
 
-	userID := fmt.Sprintf("%s", sess.Values["id"])
+	// Get the clockins of a particular Student
+	clockins, err := model.ClockinsByStudentID(studentID)
 
-	// Get the note
-	note, err := model.NoteByID(userID, noteID)
 	if err != nil { // If the note doesn't exist
 		log.Println(err)
 		sess.AddFlash(view.Flash{"An error occurred on the server. Please try again later.", view.FlashError})
 		sess.Save(r, w)
-		http.Redirect(w, r, "/notepad", http.StatusFound)
+		http.Redirect(w, r, "/list", http.StatusFound)
 		return
 	}
 
+	// Marshal provided interface into JSON structure
+	cj, _ := json.Marshal(clockins)
+
+	// Write content-type, statuscode, payload
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	fmt.Fprintf(w, "%s", cj)
+}
+
+/*
+// NotepadUpdateGET displays the note update page
+func NotepadUpdateGET(w http.ResponseWriter, r *http.Request) {
+	// Get session
+	sess := session.Instance(r)
+
+	var results []Clockin
+	// Get the note id
+	var params httprouter.Params
+	params = context.Get(r, "params").(httprouter.Params)
+	studentID := params.ByName("id")
+
+	// Get the clockins
+	results, err = ClockinsByStudentID(student_id)
+	fmt.Println(results)
+
+	if err != nil { // If the note doesn't exist
+		log.Println(err)
+		sess.AddFlash(view.Flash{"An error occurred on the server. Please try again later.", view.FlashError})
+		sess.Save(r, w)
+		http.Redirect(w, r, "/list", http.StatusFound)
+		return
+	}
+
+	// Marshal provided interface into JSON structure
+	sj, _ := json.Marshal(results)
+
+	// Write content-type, statuscode, payload
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	fmt.Fprintf(w, "%s", sj)
+
 	// Display the view
 	v := view.New(r)
-	v.Name = "notepad/update"
+	v.Name = "clockins/update"
 	v.Vars["token"] = csrfbanana.Token(w, r, sess)
 	v.Vars["note"] = note.Content
 	v.Render(w)
 }
+
 
 // NotepadUpdatePOST handles the note update form submission
 func NotepadUpdatePOST(w http.ResponseWriter, r *http.Request) {
