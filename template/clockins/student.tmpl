@@ -1,18 +1,27 @@
 {{define "title"}}GSA Aftercare{{end}}
-{{define "head"}}{{JS "static/js/angular.js"}}{{end}}
+{{define "head"}}
+{{JS "static/js/angular.js"}}
+{{end}}
 {{define "content"}}
-
 <div class="container">
 
-    <div ng-controller="ClockinCtrl">
+    <div ng-controller="ClockinCtrl" ng-cloak>
         <div class="row">
-            <div class="form-group">
-                <input class="form-control" type="text" placeholder="Search by students ID, First and Last Name, Grade" ng-model="query">
-            </div>
+            <form class="form-inline">
+                <div class="form-group">
+                    <label class="sr-only" for="start_date">From:</label>
+                    <input type="text" class="form-control" id="start_date" placeholder="Start date">
+                </div>
+                <div class="form-group">
+                    <label class="sr-only" for="end_date">To:</label>
+                    <input type="text" class="form-control" id="end_date" placeholder="End date">
+                </div>
+              <button type="submit" class="btn btn-default">Search</button>
+            </form>
             <br>
         </div>
-        <div class="row" ng-cloak>
-            <table id="results" class="col-xs-12 table table-striped table-bordered table-hover">
+        <div class="row">
+            <table id="results" class="col-xs-6 col-md-8 table table-striped table-bordered table-hover">
                 <thead>
                     <tr class="success">
                         <th>Clock IN</th>
@@ -23,8 +32,8 @@
                 </thead>
                 <tbody>
                     <tr ng-repeat="clockin in Clockins track by $index">
-                        <td>[[clockin.InAt]]</td>
-                        <td>[[clockin.OutAt]]</td>
+                        <td>[[clockin.InAt*1000 | date:'medium']]</td>
+                        <td>[[clockin.OutAt*1000 | date:'medium']]</td>
                         <td>[[clockin.TotalTime]]</td>
                         <td>[[clockin.IsOut]]</td>
                     </tr>
@@ -34,8 +43,16 @@
     </div>
 </div>
 {{CSS "static/css/custom.css"}}
-{{JS "static/js/app.js"}}
 {{JS "static/js/angular-resource.js"}}
+<!--  Angular Material Library
+{{JS "static/js/angular-animate.min.js"}}
+{{JS "static/js/angular-aria.min.js"}}
+{{JS "static/js/angular-messages.min.js"}}
+{{JS "static/js/angular-material.min.js"}}
+{{JS "static/js/jquery-ui.js"}}
+ -->
+{{JS "static/js/app.js"}}
+{{JS "static/js/services.js"}}
 
 {{end}}
 {{define "foot"}}{{end}}
