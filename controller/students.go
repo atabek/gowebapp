@@ -12,7 +12,7 @@ import (
 )
 
 // Displays the About page
-func StudentsJSONGet(w http.ResponseWriter, r *http.Request) {
+func StudentsJsonGET(w http.ResponseWriter, r *http.Request) {
 	sess := session.Instance(r)
 
 	students, err := model.StudentsGet()

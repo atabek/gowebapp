@@ -1,8 +1,8 @@
 {{define "title"}}GSA Aftercare{{end}}
-{{define "head"}}{{JS "static/js/angular.min.js"}}{{end}}
+{{define "head"}}{{JS "static/js/angular.js"}}{{end}}
 {{define "content"}}
 
-<div ng-app="aftercareApp" class="container">
+<div class="container">
 	<div class="page-header">
 		<h1>Hello, {{.first_name}}</h1>
 	</div>
@@ -35,7 +35,12 @@
 				        </thead>
 				        <tbody>
 				        <tr ng-repeat="student in students | filter: search ">
-				            <td id="Student_id"><a href="/clockins/student/json/[[student.Student_id]]">[[student.Student_id]]</a></td>
+				            <td id="Student_id">
+								<a href="/clockins/students/[[student.Student_id]]"
+								ng-click="setDataForStudent(student.Student_id)">
+									[[student.Student_id]]
+								</a>
+							</td>
 				            <td id="Last_name">[[student.Last_name]]</td>
 				            <td id="First_name">[[student.First_name]]</td>
 							<td id="Grade">[[student.Grade]]</td>
@@ -61,5 +66,6 @@
 </div>
 {{CSS "static/css/custom.css"}}
 {{JS "static/js/app.js"}}
+{{JS "static/js/angular-resource.js"}}
 {{end}}
 {{define "foot"}}{{end}}

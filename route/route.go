@@ -94,7 +94,7 @@ func routes() *httprouter.Router {
 		ThenFunc(controller.List)))
 	r.GET("/students", hr.Handler(alice.
 		New(acl.DisallowAnon).
-		ThenFunc(controller.StudentsJSONGet)))
+		ThenFunc(controller.StudentsJsonGET)))
 
 	// About
 	r.GET("/about", hr.Handler(alice.
@@ -114,7 +114,10 @@ func routes() *httprouter.Router {
 
 	r.GET("/clockins/student/json/:id", hr.Handler(alice.
 		New(acl.DisallowAnon).
-		ThenFunc(controller.ClockinByStudentIdJsonGET)))
+		ThenFunc(controller.ClockinsByStudentIdJsonGET)))
+	r.GET("/clockins/students/:student_id", hr.Handler(alice.
+		New(acl.DisallowAnon).
+		ThenFunc(controller.ClockinsByStudentIdGET)))
 
 	// r.POST("/clockin/update/:id", hr.Handler(alice.
 	// 	New(acl.DisallowAnon).

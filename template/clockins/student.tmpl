@@ -1,0 +1,41 @@
+{{define "title"}}GSA Aftercare{{end}}
+{{define "head"}}{{JS "static/js/angular.js"}}{{end}}
+{{define "content"}}
+
+<div class="container">
+
+    <div ng-controller="ClockinCtrl">
+        <div class="row">
+            <div class="form-group">
+                <input class="form-control" type="text" placeholder="Search by students ID, First and Last Name, Grade" ng-model="query">
+            </div>
+            <br>
+        </div>
+        <div class="row" ng-cloak>
+            <table id="results" class="col-xs-12 table table-striped table-bordered table-hover">
+                <thead>
+                    <tr class="success">
+                        <th>Clock IN</th>
+                        <th>Clock OUT</th>
+                        <th>TotalTime</th>
+                        <th>Out of School?</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="clockin in Clockins track by $index">
+                        <td>[[clockin.InAt]]</td>
+                        <td>[[clockin.OutAt]]</td>
+                        <td>[[clockin.TotalTime]]</td>
+                        <td>[[clockin.IsOut]]</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{{CSS "static/css/custom.css"}}
+{{JS "static/js/app.js"}}
+{{JS "static/js/angular-resource.js"}}
+
+{{end}}
+{{define "foot"}}{{end}}

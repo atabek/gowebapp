@@ -86,7 +86,7 @@ func ClockinCreatePOST(w http.ResponseWriter, r *http.Request) {
 }
 
 // ClockinByStudentIdJsonGET displays the note update page
-func ClockinByStudentIdJsonGET(w http.ResponseWriter, r *http.Request) {
+func ClockinsByStudentIdJsonGET(w http.ResponseWriter, r *http.Request) {
 	// Get session
 	sess := session.Instance(r)
 
@@ -113,6 +113,36 @@ func ClockinByStudentIdJsonGET(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(200)
 	fmt.Fprintf(w, "%s", cj)
+}
+
+// ClockinsByStudentIdJsonGET displays the note update page
+func ClockinsByStudentIdGET(w http.ResponseWriter, r *http.Request) {
+	// Get session
+	sess := session.Instance(r)
+
+	// Get the Student id
+	var params httprouter.Params
+	params = context.Get(r, "params").(httprouter.Params)
+	studentID := params.ByName("student_id")
+
+	// Get the clockins of a particular Student
+	student, err := model.StudentBySID(studentID)
+	fmt.Println(student.Student_id)
+
+	if err != nil { // If the note doesn't exist
+		log.Println(err)
+		sess.AddFlash(view.Flash{"An error occurred on the server. Please try again later.", view.FlashError})
+		sess.Save(r, w)
+		http.Redirect(w, r, "/list", http.StatusFound)
+		return
+	}
+
+	// Display the view
+	v := view.New(r)
+	v.Name = "clockins/student"
+	v.Vars["token"] = csrfbanana.Token(w, r, sess)
+	//v.Vars["student_id"] = studentID
+	v.Render(w)
 }
 
 /*
