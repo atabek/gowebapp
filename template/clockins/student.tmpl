@@ -1,6 +1,6 @@
 {{define "title"}}GSA Aftercare{{end}}
 {{define "head"}}
-{{JS "static/js/angular.js"}}
+{{CSS "static/css/custom.css"}}
 {{end}}
 {{define "content"}}
 <div class="container">
@@ -8,13 +8,15 @@
     <div ng-controller="ClockinCtrl" ng-cloak>
         <div class="row">
             <form class="form-inline">
-                <div class="form-group">
+                <div class="form-group" title="Date From">
                     <label class="sr-only" for="start_date">From:</label>
-                    <input type="text" class="form-control" id="start_date" placeholder="Start date">
+                    <input type="date" class="form-control" id="start_date"
+                        ng-model="dateRange.from" placeholder="Start date">
                 </div>
-                <div class="form-group">
+                <div class="form-group" title="Date To">
                     <label class="sr-only" for="end_date">To:</label>
-                    <input type="text" class="form-control" id="end_date" placeholder="End date">
+                    <input type="date" class="form-control" id="end_date"
+                        ng-model="dateRange.to" placeholder="End date">
                 </div>
               <button type="submit" class="btn btn-default">Search</button>
             </form>
@@ -31,7 +33,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr ng-repeat="clockin in Clockins track by $index">
+                    <tr ng-repeat="clockin in Clockins">
                         <td>[[clockin.InAt*1000 | date:'medium']]</td>
                         <td>[[clockin.OutAt*1000 | date:'medium']]</td>
                         <td>[[clockin.TotalTime]]</td>
@@ -42,15 +44,14 @@
         </div>
     </div>
 </div>
-{{CSS "static/css/custom.css"}}
+{{JS "static/js/angular.js"}}
 {{JS "static/js/angular-resource.js"}}
 <!--  Angular Material Library
 {{JS "static/js/angular-animate.min.js"}}
 {{JS "static/js/angular-aria.min.js"}}
 {{JS "static/js/angular-messages.min.js"}}
 {{JS "static/js/angular-material.min.js"}}
-{{JS "static/js/jquery-ui.js"}}
- -->
+-->
 {{JS "static/js/app.js"}}
 {{JS "static/js/services.js"}}
 

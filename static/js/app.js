@@ -16,6 +16,10 @@ angular.module('aftercareApp').factory('ClockinService', function($resource){
     });
 })
 
+.filter("dateRangeFilter", function(){
+
+})
+
 .controller('StudentCtrl', function($scope, $http) {
     'use strict';
 
@@ -44,4 +48,12 @@ angular.module('aftercareApp').factory('ClockinService', function($resource){
         data = data.splice(-2, 2);
         $scope.Clockins = data;
     });
+
+    var tf = new Date();
+
+    $scope.dateRange = {
+        from: new Date(tf.setDate(tf.getDate() - tf.getDate() + 1)),
+        to:   new Date()
+    };
+    console.log(typeof $scope.dateRange.from);
 });
