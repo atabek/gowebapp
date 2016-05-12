@@ -126,8 +126,7 @@ func ClockinsByStudentIdGET(w http.ResponseWriter, r *http.Request) {
 	studentID := params.ByName("student_id")
 
 	// Get the clockins of a particular Student
-	student, err := model.StudentBySID(studentID)
-	fmt.Println(student.Student_id)
+	_, err := model.StudentBySID(studentID)
 
 	if err != nil { // If the note doesn't exist
 		log.Println(err)

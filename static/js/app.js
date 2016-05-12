@@ -72,6 +72,12 @@ angular.module('aftercareApp').factory('ClockinService', function($resource){
         }
         return result;
     };
+})
+
+.filter("formatDateFilter", function(){
+    return function(item){
+        return formatDate(item);
+    }
 });
 
 function parseDate(input) {
@@ -81,4 +87,16 @@ function parseDate(input) {
     d = new Date(year, month, day);
 
     return d.getTime();
+}
+
+function formatDate(input){
+    var totalSec = input;
+    var hours = parseInt( totalSec / 3600 ) % 24;
+    var minutes = parseInt( totalSec / 60 ) % 60;
+    var seconds = totalSec % 60;
+
+    var result = (hours < 10 ? "0" + hours : hours)        + "h:" +
+                 (minutes < 10 ? "0" + minutes : minutes)  + "m:" +
+                 (seconds  < 10 ? "0" + seconds : seconds) + "s";
+    return result;
 }

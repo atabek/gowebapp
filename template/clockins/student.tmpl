@@ -35,9 +35,9 @@
                 </thead>
                 <tbody>
                     <tr ng-repeat="clockin in Clockins | dateRangeFilter:dateRange.from:dateRange.to">
-                        <td>[[clockin.InAt*1000 | date:'medium']]</td>
+                        <td>[[clockin.InAt*1000  | date:'medium']]</td>
                         <td>[[clockin.OutAt*1000 | date:'medium']]</td>
-                        <td>[[clockin.TotalTime]]</td>
+                        <td>[[clockin.TotalTime  | formatDateFilter ]]</td>
                         <td>[[clockin.IsOut]]</td>
                     </tr>
                 </tbody>
