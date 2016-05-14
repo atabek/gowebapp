@@ -3,55 +3,84 @@
 {{CSS "static/css/custom.css"}}
 {{JS "static/js/angular.js"}}
 {{JS "static/js/angular-resource.js"}}
+{{JS "static/js/jquery1.11.0.min.js"}}
 {{end}}
 {{define "content"}}
 <div class="container">
 
-    <div ng-controller="ClockinCtrl" ng-cloak>
+    <div ng-controller="ClockinCtrl"  id="body" ng-cloak>
         <div class="row">
-            <form class="form-inline">
-                <div class="form-group" title="Date From">
-                    <label class="sr-only" for="start_date">From:</label>
-                    <input type="date" class="form-control" id="start_date"
-                        ng-model="dateRange.from" placeholder="Start date">
-                </div>
-                <div class="form-group" title="Date To">
-                    <label class="sr-only" for="end_date">To:</label>
-                    <input type="date" class="form-control" id="end_date"
-                        ng-model="dateRange.to" placeholder="End date">
-                </div>
-            </form>
-            <br>
+            <div class="col-lg-7">
+                <form class="form-horizontal" role="form">
+                    <div class="form-group">
+                        <div class="col-lg-12">
+                            <div class="content row">
+                                <div class="col-xs-4" style="padding-right: 5px;">
+                                    <input type="date"  class="form-control" id="start_date"
+                                        ng-model="dateRange.from" placeholder="Start date" required>
+                                </div>
+                                <div class="col-xs-4"  style="padding-right: 5px;">
+                                    <input type="date" class="form-control" id="end_date"
+                                        ng-model="dateRange.to" placeholder="End date" required>
+                                </div>
+                                <div class="col-xs-4">
+                                    <a href="javascript:genPDF()" class="btn btn-info"
+                                    role="button">Report</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="col-lg-5">
+                <p>
+                    Total time: [[sum | formatDateFilter]]
+                </p>
+                <p>
+                    Day count:  [[day_count]]
+                </p>
+                <p>
+                    Dummy data
+                </p>
+            </div>
         </div>
+        <br>
         <div class="row">
             <table id="results" class="col-xs-6 col-md-8 table table-striped table-bordered table-hover">
                 <thead>
                     <tr class="success">
+                        <th>#</th>
                         <th>Clock IN</th>
                         <th>Clock OUT</th>
                         <th>TotalTime</th>
-                        <th>Out of School?</th>
+                        <th>Action</th>
+                        <!-- <th>Out of School?</th> -->
                     </tr>
                 </thead>
                 <tbody>
-                    <tr ng-repeat="clockin in Clockins | dateRangeFilter:dateRange.from:dateRange.to">
+                    <tr ng-click="clickRow()" ng-repeat="clockin in Clockins | orderBy:'-InAt' |
+                        dateRangeFilter:dateRange.from:dateRange.to:this">
+                        <td>[[$index + 1]]</td>
                         <td>[[clockin.InAt*1000  | date:'medium']]</td>
                         <td>[[clockin.OutAt*1000 | date:'medium']]</td>
                         <td>[[clockin.TotalTime  | formatDateFilter ]]</td>
-                        <td>[[clockin.IsOut]]</td>
+                        <td ng-click="clickAction($event)">
+                            <a href="#1">Action1</a>,
+                            <a href="#2">Action2</a>,
+                            <a href="#3">Action3</a>
+                        </td>
+                        <!-- <td>[[clockin.IsOut]]</td> -->
                     </tr>
                 </tbody>
             </table>
         </div>
     </div>
 </div>
-<!--  Angular Material Library
-{{JS "static/js/angular-animate.min.js"}}
-{{JS "static/js/angular-aria.min.js"}}
-{{JS "static/js/angular-messages.min.js"}}
-{{JS "static/js/angular-material.min.js"}}
--->
+
 {{JS "static/js/app.js"}}
+{{JS "static/js/jspdf.min.js"}}
+{{JS "static/js/html2canvas.js"}}
+{{JS "static/js/html2pdfmaker.js"}}
 
 {{end}}
 {{define "foot"}}{{end}}

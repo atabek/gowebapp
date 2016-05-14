@@ -39,6 +39,7 @@ angular.module('aftercareApp').factory('ClockinService', function($resource){
             function($scope, $http , ClockinService, $location){
     var url = $location.absUrl().split('/');
     var studentID = url[url.length - 1];
+    $scope.studentID = studentID;
     var Clockins = ClockinService.query({id: studentID});
     Clockins.$promise.then(function(data){
         data = data.splice(-2, 2);
@@ -53,40 +54,78 @@ angular.module('aftercareApp').factory('ClockinService', function($resource){
         from: new Date(tf.setDate(1)),
         to:   new Date()
     };
+
+
+    // Get the total time
+    $scope.getTotal = function(){
+        var total = 0;
+        var clockins = $scope.Clockins;
+        if(typeof clockins == "undefined"){
+            return total;
+        }
+        for(var i = 0; i < clockins.length; i++){
+            var clockin = clockins[i];
+            total += clockin.TotalTime;
+        }
+        return total;
+    }
+
+    // Functions for clicking the row and action column
+    $scope.clickRow = function(){
+        console.log("ClickRow method");
+    }
+
+    $scope.clickAction = function(e){
+        console.log("Click 2 method");
+        e.stopPropagation();
+    }
 }])
 
 .filter("dateRangeFilter", function(){
-    return function(items, from, to){
+    return function(items, from, to, scope){
         var result = [];
+        var sum    = 0;
+        var day_count  = 0;
         if(typeof items == "undefined"){
             return result;
         }
         var df = parseDate(from);
-        var dt = parseDate(to);
+        var dt = parseDate(to) + 86399999;
         for (var i = 0; i < items.length; i++){
-            var tf = new Date(items[i].InAt * 1000),
-                tt = new Date(items[i].OutAt * 1000);
-            if (tf > df && tt < dt)  {
+            var tf = items[i].InAt * 1000,
+                tt = items[i].OutAt * 1000;
+            if (tf >= df && tt <= dt)  {
                 result.push(items[i]);
+                sum += items[i].TotalTime;
+                day_count += 1;
             }
         }
+        scope.sum = sum;
+        scope.day_count = day_count;
         return result;
     };
 })
 
 .filter("formatDateFilter", function(){
     return function(item){
-        return formatDate(item);
+        if (typeof item == "number"){
+            return formatDate(item);
+        } else {
+            return formatDate(0);
+        }
     }
 });
 
 function parseDate(input) {
-    var day = input.getDate();
-    var month = input.getMonth();
-    var year = input.getFullYear();
-    d = new Date(year, month, day);
-
-    return d.getTime();
+    if (typeof input == "undefined"){
+        return new Date();
+    } else {
+        var day = input.getDate();
+        var month = input.getMonth();
+        var year = input.getFullYear();
+        d = new Date(year, month, day);
+        return d.getTime();
+    }
 }
 
 function formatDate(input){

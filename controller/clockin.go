@@ -5,6 +5,7 @@ import (
 	"log"
 	"net/http"
 	"encoding/json"
+	"html"
 
 	"github.com/atabek/gowebapp/model"
 	"github.com/atabek/gowebapp/shared/session"
@@ -67,7 +68,7 @@ func ClockinCreatePOST(w http.ResponseWriter, r *http.Request) {
 	//studentID := fmt.Sprintf("%s", sess.Values["studentID"])
 
 	// Get database result
-	err := model.ClockinCreate(student_id)
+	err := model.ClockinCreate(html.EscapeString(student_id))
 	// Will only error if there is a problem with the query
 	if err != nil {
 		log.Println(err)
@@ -96,7 +97,7 @@ func ClockinsByStudentIdJsonGET(w http.ResponseWriter, r *http.Request) {
 	studentID := params.ByName("id")
 
 	// Get the clockins of a particular Student
-	clockins, err := model.ClockinsByStudentID(studentID)
+	clockins, err := model.ClockinsByStudentID(html.EscapeString(studentID))
 
 	if err != nil { // If the note doesn't exist
 		log.Println(err)
@@ -126,7 +127,7 @@ func ClockinsByStudentIdGET(w http.ResponseWriter, r *http.Request) {
 	studentID := params.ByName("student_id")
 
 	// Get the clockins of a particular Student
-	_, err := model.StudentBySID(studentID)
+	_, err := model.StudentBySID(html.EscapeString(studentID))
 
 	if err != nil { // If the note doesn't exist
 		log.Println(err)
