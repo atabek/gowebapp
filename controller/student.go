@@ -21,7 +21,7 @@ func RegisterStudentGET(w http.ResponseWriter, r *http.Request) {
 
 	// Display the view
 	v := view.New(r)
-	v.Name = "registerstudent/registerstudent"
+	v.Name = "students/create"
 	v.Vars["token"] = csrfbanana.Token(w, r, sess)
 	// Refill any form fields
 	view.Repopulate([]string{"first_name", "last_name", "grade", "student_id"}, r.Form, v.Vars)
@@ -84,7 +84,7 @@ func RegisterStudentPOST(w http.ResponseWriter, r *http.Request) {
 		} else {
 			sess.AddFlash(view.Flash{"Account created successfully for: " + student_id, view.FlashSuccess})
 			sess.Save(r, w)
-			http.Redirect(w, r, "/registerstudent", http.StatusFound)
+			http.Redirect(w, r, "/students/create", http.StatusFound)
 			return
 		}
 	} else if err != nil { // Catch all other errors

@@ -40,13 +40,17 @@ angular.module('aftercareApp').factory('ClockinService', function($resource){
     var url = $location.absUrl().split('/');
     var studentID = url[url.length - 1];
     $scope.studentID = studentID;
-    var Clockins = ClockinService.query({id: studentID});
-    Clockins.$promise.then(function(data){
-        data = data.splice(-2, 2);
-        $scope.Clockins = data;
-    }, function(error){
-        console.log('oopps ' + error);
-    });
+    $scope.Clockins = ClockinService.query({id: studentID});
+    // console.log($scope.Clockins);
+    // Clockins.$promise.then(function(data){
+    //     console.log(data.length);
+    //     console.log(data);
+    //     data.splice(-2, 2);
+    //     $scope.Clockins = data;
+    //     console.log($scope.Clockins.length);
+    // }, function(error){
+    //     console.log('oopps ' + error);
+    // });
 
     var tf = new Date();
 
@@ -54,7 +58,6 @@ angular.module('aftercareApp').factory('ClockinService', function($resource){
         from: new Date(tf.setDate(1)),
         to:   new Date()
     };
-
 
     // Get the total time
     $scope.getTotal = function(){

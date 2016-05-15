@@ -81,10 +81,10 @@ func routes() *httprouter.Router {
 		ThenFunc(controller.RegisterPOST)))
 
 	// Register Student
-	r.GET("/registerstudent", hr.Handler(alice.
+	r.GET("/students/create", hr.Handler(alice.
 		New(acl.DisallowAnon).
 		ThenFunc(controller.RegisterStudentGET)))
-	r.POST("/registerstudent", hr.Handler(alice.
+	r.POST("/students/create", hr.Handler(alice.
 		New(acl.DisallowAnon).
 		ThenFunc(controller.RegisterStudentPOST)))
 
