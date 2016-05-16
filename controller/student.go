@@ -11,8 +11,9 @@ import (
 	"github.com/atabek/gowebapp/shared/recaptcha"
 	"github.com/atabek/gowebapp/shared/session"
 	"github.com/atabek/gowebapp/shared/view"
-
 	"github.com/josephspurrier/csrfbanana"
+	"github.com/julienschmidt/httprouter"
+	"github.com/gorilla/context"
 )
 
 func RegisterStudentGET(w http.ResponseWriter, r *http.Request) {
@@ -31,13 +32,6 @@ func RegisterStudentGET(w http.ResponseWriter, r *http.Request) {
 func RegisterStudentPOST(w http.ResponseWriter, r *http.Request) {
 	// Get session
 	sess := session.Instance(r)
-
-	// // Prevent brute force login attempts by not hitting MySQL and pretending like it was invalid :-)
-	// if sess.Values["register_attempt"] != nil && sess.Values["register_attempt"].(int) >= 5 {
-	// 	log.Println("Brute force register prevented")
-	// 	http.Redirect(w, r, "/registerstudent", http.StatusFound)
-	// 	return
-	// }
 
 	// Validate with required fields
 	if validate, missingField := view.Validate(r, []string{"first_name", "last_name", "grade", "student_id"}); !validate {
@@ -60,16 +54,6 @@ func RegisterStudentPOST(w http.ResponseWriter, r *http.Request) {
 	last_name := r.FormValue("last_name")
 	grade := r.FormValue("grade")
 	student_id := r.FormValue("student_id")
-	//password, errp := passhash.HashString(r.FormValue("password"))
-
-	// // If password hashing failed
-	// if errp != nil {
-	// 	log.Println(errp)
-	// 	sess.AddFlash(view.Flash{"An error occurred on the server. Please try again later.", view.FlashError})
-	// 	sess.Save(r, w)
-	// 	http.Redirect(w, r, "/register", http.StatusFound)
-	// 	return
-	// }
 
 	// Get database result
 	_, err := model.StudentBySID(html.EscapeString(student_id))
@@ -98,6 +82,82 @@ func RegisterStudentPOST(w http.ResponseWriter, r *http.Request) {
 
 	// Display the page
 	RegisterStudentGET(w, r)
+}
+
+// Update student
+
+// NotepadUpdateGET displays the note update page
+func StudentUpdateGET(w http.ResponseWriter, r *http.Request) {
+	// Get session
+	sess := session.Instance(r)
+
+	// Get the note id
+	var params httprouter.Params
+	params = context.Get(r, "params").(httprouter.Params)
+	studentID := params.ByName("id")
+
+	//userID := fmt.Sprintf("%s", sess.Values["id"])
+
+	// Get the note
+	student, err := model.StudentBySID(studentID)
+	if err != nil { // If the note doesn't exist
+		log.Println(err)
+		sess.AddFlash(view.Flash{"An error occurred on the server. Please try again later.", view.FlashError})
+		sess.Save(r, w)
+		http.Redirect(w, r, "/list", http.StatusFound)
+		return
+	}
+
+	// Display the view
+	v := view.New(r)
+	v.Name = "students/update"
+	v.Vars["token"] = csrfbanana.Token(w, r, sess)
+	v.Vars["first_name"] = student.First_name;
+	v.Vars["last_name"]  = student.Last_name;
+	v.Vars["grade"]      = student.Grade;
+	v.Render(w)
+}
+
+// StudentUpdatePOST handles the student update form submission
+func StudentUpdatePOST(w http.ResponseWriter, r *http.Request) {
+	// Get session
+	sess := session.Instance(r)
+
+	// Validate with required fields
+	if validate, missingField := view.Validate(r, []string{"first_name", "last_name", "grade"}); !validate {
+		sess.AddFlash(view.Flash{"Field missing: " + missingField, view.FlashError})
+		sess.Save(r, w)
+		StudentUpdateGET(w, r)
+		return
+	}
+
+	// Get form values
+	firstName := r.FormValue("first_name")
+	lastName  := r.FormValue("last_name")
+	grade     := r.FormValue("grade")
+
+	// userID := fmt.Sprintf("%s", sess.Values["id"])
+
+	var params httprouter.Params
+	params = context.Get(r, "params").(httprouter.Params)
+	studentID := params.ByName("id")
+
+	// Get database result
+	err := model.StudentUpdate(html.EscapeString(studentID), firstName, lastName, grade)
+	// Will only error if there is a problem with the query
+	if err != nil {
+		log.Println(err)
+		sess.AddFlash(view.Flash{"An error occurred on the server. Please try again later.", view.FlashError})
+		sess.Save(r, w)
+	} else {
+		sess.AddFlash(view.Flash{"student updated!", view.FlashSuccess})
+		sess.Save(r, w)
+		http.Redirect(w, r, "/list", http.StatusFound)
+		return
+	}
+
+	// Display the same page
+	NotepadUpdateGET(w, r)
 }
 
 // Return the JSON of all the students in the database

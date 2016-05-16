@@ -80,6 +80,35 @@ func StudentCreate(first_name, last_name, grade, student_id string) error {
 	return standardizeError(err)
 }
 
+// StudentUpdate updates a student
+func StudentUpdate(studentID, firstName, lastName, grade string) error {
+	var err error
+
+	now := time.Now()
+
+	if database.CheckConnection() {
+		// Create a copy of mongo
+		session := database.Mongo.Copy()
+		defer session.Close()
+		c := session.DB(database.ReadConfig().MongoDB.Database).C("student")
+		var student Student
+		student, err = StudentBySID(studentID)
+		if err == nil {
+			student.Updated_at = now
+			student.First_name = firstName
+			student.Last_name  = lastName
+			student.Grade      = grade
+			err = c.UpdateId(bson.ObjectIdHex(student.ID()), &student)
+		} else {
+			err = ErrUnauthorized
+		}
+	} else {
+		err = ErrUnavailable
+	}
+
+	return standardizeError(err)
+}
+
 // StudentsGet gets students
 func StudentsGet() ([]Student, error) {
 	var err error

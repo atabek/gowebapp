@@ -1,0 +1,44 @@
+{{define "title"}}Update a Student Account{{end}}
+{{define "head"}}{{JS "//www.google.com/recaptcha/api.js"}}{{end}}
+{{define "content"}}
+
+<div class="container">
+	<div class="page-header">
+		<h1>{{template "title" .}}</h1>
+	</div>
+	<form id="form" method="post">
+		<!-- <div class="form-group">
+			<label for="student_id">Student School ID</label><div>
+			<input type="text" class="form-control" id="student_id" name="student_id" maxlength="48" placeholder="Student School ID" value="{{.student_id}}" />	</div>
+		</div> -->
+		<div class="form-group">
+			<label for="first_name">First Name</label>
+			<div><input type="text" class="form-control" id="first_name" name="first_name" maxlength="48" placeholder="First Name" value="{{.first_name}}" /></div>
+		</div>
+
+		<div class="form-group">
+			<label for="last_name">Last Name</label>
+			<div><input type="text" class="form-control" id="last_name" name="last_name" maxlength="48" placeholder="Last Name" value="{{.last_name}}" /></div>
+		</div>
+
+		<div class="form-group">
+			<label for="grade">Grade</label>
+			<div><input type="text" class="form-control" id="grade" name="grade" maxlength="48" placeholder="Grade" value="{{.grade}}" /></div>
+		</div>
+
+		{{if RECAPTCHA_SITEKEY}}
+		<div class="g-recaptcha" data-sitekey="{{RECAPTCHA_SITEKEY}}" style="margin-bottom: 1rem;"></div>
+		{{end}}
+
+		<a title="Save" class="btn btn-success" role="submit" onclick="document.getElementById('form').submit();">
+			<span class="glyphicon glyphicon-ok" aria-hidden="true"></span> Save
+		</a>
+
+		<input type="hidden" name="token" value="{{.token}}">
+	</form>
+
+	{{template "footer" .}}
+</div>
+
+{{end}}
+{{define "foot"}}{{end}}
