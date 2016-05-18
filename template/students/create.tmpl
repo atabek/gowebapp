@@ -8,29 +8,73 @@
 	</div>
 	<form method="post">
 		<div class="form-group">
-			<label for="student_id">Student School ID</label><div>
-			<input type="text" class="form-control" id="student_id" name="student_id" maxlength="48" placeholder="Student School ID" value="{{.student_id}}" />	</div>
+			<label for="student_id">Student School ID</label>
+			<div>
+				<input type="text" class="form-control" id="student_id"
+				name="student_id" maxlength="48" placeholder="Student School ID"
+				value="{{.student_id}}" />
+			</div>
 		</div>
 		<div class="form-group">
 			<label for="first_name">First Name</label>
-			<div><input type="text" class="form-control" id="first_name" name="first_name" maxlength="48" placeholder="First Name" value="{{.first_name}}" /></div>
+			<div><input type="text" class="form-control" id="first_name"
+				name="first_name" maxlength="48" placeholder="First Name"
+				value="{{.first_name}}" />
+			</div>
 		</div>
 
 		<div class="form-group">
 			<label for="last_name">Last Name</label>
-			<div><input type="text" class="form-control" id="last_name" name="last_name" maxlength="48" placeholder="Last Name" value="{{.last_name}}" /></div>
+			<div><input type="text" class="form-control" id="last_name"
+				name="last_name" maxlength="48" placeholder="Last Name"
+				value="{{.last_name}}" />
+			</div>
 		</div>
 
 		<div class="form-group">
 			<label for="grade">Grade</label>
-			<div><input type="text" class="form-control" id="grade" name="grade" maxlength="48" placeholder="Grade" value="{{.grade}}" /></div>
+			<div><input type="text" class="form-control" id="grade"
+				name="grade" maxlength="48" placeholder="Grade"
+				value="{{.grade}}" />
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label for="fivedays">5 day per week</label>
+			<div><input type="text" class="form-control" id="fivedays"
+				name="fivedays" maxlength="48" value="{{.fivedays}}" required/>
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label for="caretype">Care Type</label>
+			<div><input type="text" class="form-control" id="caretype"
+				name="caretype" maxlength="48" value="{{.caretype}}" required/>
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label for="freereduced">Free/Reduced?</label>
+			<div><input type="text" class="form-control" id="freereduced"
+				name="freereduced" maxlength="48" value="{{.freereduced}}" required/>
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label for="balance">Balance</label>
+			<div><input type="text" class="form-control" id="balance"
+				name="balance" maxlength="48" value="{{.balance}}" />
+			</div>
 		</div>
 
 		{{if RECAPTCHA_SITEKEY}}
-		<div class="g-recaptcha" data-sitekey="{{RECAPTCHA_SITEKEY}}" style="margin-bottom: 1rem;"></div>
+		<div class="g-recaptcha" data-sitekey="{{RECAPTCHA_SITEKEY}}"
+			style="margin-bottom: 1rem;">
+		</div>
 		{{end}}
 
-		<input type="submit" value="Create Student Account" class="btn btn-primary" />
+		<input type="submit" value="Create Student Account"
+			class="btn btn-primary" />
 
 		<input type="hidden" name="token" value="{{.token}}">
 	</form>

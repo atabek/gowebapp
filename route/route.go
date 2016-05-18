@@ -95,6 +95,9 @@ func routes() *httprouter.Router {
 	r.POST("/students/update/:id", hr.Handler(alice.
 		New(acl.DisallowAnon).
 		ThenFunc(controller.StudentUpdatePOST)))
+	r.GET("/students/delete/:id", hr.Handler(alice.
+		New(acl.DisallowAnon).
+		ThenFunc(controller.StudentDeleteGET)))
 
 	// Students page
 	r.GET("/list", hr.Handler(alice.
