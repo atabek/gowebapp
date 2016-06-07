@@ -41,16 +41,6 @@ angular.module('aftercareApp').factory('ClockinService', function($resource){
     var studentID = url[url.length - 1];
     $scope.studentID = studentID;
     $scope.Clockins = ClockinService.query({id: studentID});
-    // console.log($scope.Clockins);
-    // Clockins.$promise.then(function(data){
-    //     console.log(data.length);
-    //     console.log(data);
-    //     data.splice(-2, 2);
-    //     $scope.Clockins = data;
-    //     console.log($scope.Clockins.length);
-    // }, function(error){
-    //     console.log('oopps ' + error);
-    // });
 
     var tf = new Date();
 
@@ -82,6 +72,32 @@ angular.module('aftercareApp').factory('ClockinService', function($resource){
         console.log("Click 2 method");
         e.stopPropagation();
     }
+}])
+
+.controller('FormCtrl', ['$scope', function($scope){
+
+    $scope.fiveDayOptions = [
+        {name : "5 days", value : true},
+        {name : "2-4 days", value : false}
+    ];
+
+    $scope.careTypes = [
+        {name : "before", value : 0},
+        {name : "after",  value : 1},
+        {name : "both",   value : 2}
+    ];
+
+    $scope.freeReducedOptions = [
+        {name : "Yes", value : true},
+        {name : "No", value : false}
+    ];
+
+    $scope.items = [
+        {name: 'one', age: 30 },
+        { name: 'two', age: 27 },
+        { name: 'three', age: 50 }
+    ];
+
 }])
 
 .filter("dateRangeFilter", function(){

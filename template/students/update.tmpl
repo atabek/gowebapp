@@ -1,8 +1,12 @@
 {{define "title"}}Update a Student Account{{end}}
-{{define "head"}}{{JS "//www.google.com/recaptcha/api.js"}}{{end}}
+{{define "head"}}
+{{JS "//www.google.com/recaptcha/api.js"}}
+{{JS "static/js/angular.js"}}
+{{JS "static/js/angular-resource.js"}}
+{{end}}
 {{define "content"}}
 
-<div class="container">
+<div class="container" ng-controller="FormCtrl">
 	<div class="page-header">
 		<h1>{{template "title" .}}</h1>
 	</div>
@@ -26,6 +30,56 @@
 			<div><input type="text" class="form-control" id="grade" name="grade" maxlength="48" placeholder="Grade" value="{{.grade}}" /></div>
 		</div>
 
+		<div class="form-group">
+			<label for="balance">Balance</label>
+			<div><input type="number" class="form-control" id="balance"
+				name="balance" maxlength="48" value="{{.balance}}" required/>
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label for="fivedays">Days per week</label>
+			<select name="fivedays">
+			  <option value="true" selected>5</option>
+			  <option value="false" >2-4</option>
+			</select>
+			<!-- <div><input type="text" class="form-control" id="fivedays"
+				name="fivedays" maxlength="48" value="{{.fivedays}}" required/>
+			</div> -->
+		</div>
+
+		<div class="form-group">
+			<label for="caretype">Care Type</label>
+			<div>
+				<!-- <input type="text" class="form-control" id="caretype"
+				name="" maxlength="48" value="{{.caretype}}" required/> -->
+				<select name="caretype">
+				  <option value="0" selected>Beforecare</option>
+				  <option value="1">Aftercare</option>
+				  <option value="2">Both</option>
+				</select>
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label for="freereduced">Free/Reduced?</label>
+			<div>
+				<!-- <input type="text" class="form-control" id="freereduced"
+				name="freereduced" maxlength="48" value="{{.freereduced}}" required/> -->
+				<!-- <select name="freereduced">
+				  <option value="true" selected>Yes</option>
+				  <option value="false">No</option>
+				</select> -->
+				<select ng-init='freereduced = "{{.freereduced}}"' ng-model="freereduced">
+					<option ng-repeat="item in freeReducedOptions"
+					value="[[item.value]]">[[item.name]]</option>
+				</select>
+				<p>
+					Free reduced value: {{.freereduced}}
+				</p>
+			</div>
+		</div>
+
 		{{if RECAPTCHA_SITEKEY}}
 		<div class="g-recaptcha" data-sitekey="{{RECAPTCHA_SITEKEY}}" style="margin-bottom: 1rem;"></div>
 		{{end}}
@@ -39,6 +93,7 @@
 
 	{{template "footer" .}}
 </div>
+{{JS "static/js/app.js"}}
 
 {{end}}
 {{define "foot"}}{{end}}

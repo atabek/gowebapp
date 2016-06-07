@@ -7,7 +7,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"strconv"
-	"reflect"
+	// "reflect"
 
 	"github.com/atabek/gowebapp/model"
 	"github.com/atabek/gowebapp/shared/recaptcha"
@@ -134,10 +134,14 @@ func StudentUpdateGET(w http.ResponseWriter, r *http.Request) {
 	// Display the view
 	v := view.New(r)
 	v.Name = "students/update"
-	v.Vars["token"] = csrfbanana.Token(w, r, sess)
-	v.Vars["first_name"] = student.First_name;
-	v.Vars["last_name"]  = student.Last_name;
-	v.Vars["grade"]      = student.Grade;
+	v.Vars["token"]       = csrfbanana.Token(w, r, sess)
+	v.Vars["first_name"]  = student.First_name;
+	v.Vars["last_name"]   = student.Last_name;
+	v.Vars["grade"]       = student.Grade;
+	v.Vars["fivedays"]    = student.FiveDays;
+	v.Vars["caretype"]    = student.CareType;
+	v.Vars["freereduced"] = student.FreeReduced;
+	v.Vars["balance"]     = student.Balance;
 	v.Render(w)
 }
 
@@ -147,7 +151,9 @@ func StudentUpdatePOST(w http.ResponseWriter, r *http.Request) {
 	sess := session.Instance(r)
 
 	// Validate with required fields
-	if validate, missingField := view.Validate(r, []string{"first_name", "last_name", "grade"}); !validate {
+	if validate, missingField := view.Validate(r, []string{
+		"first_name", "last_name", "grade", "student_id",
+		"fivedays", "caretype", "freereduced", "balance"}); !validate {
 		sess.AddFlash(view.Flash{"Field missing: " + missingField, view.FlashError})
 		sess.Save(r, w)
 		StudentUpdateGET(w, r)
